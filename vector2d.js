@@ -101,6 +101,16 @@ proto.clone = function() {
   return Vector2D(this);
 };
 
+proto.copy = function(v) {
+  this._x = v._x;
+  this._y = v._y;
+  this._changed = true;
+};
+
+proto.toString = function(v) {
+  return "Vector2D(" + this._x + "," + this._y + ")";
+};
+
 proto.destroy = function() {
   if (_usingPool) _Pool.free(this);
 };
