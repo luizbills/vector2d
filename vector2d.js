@@ -1,7 +1,15 @@
 ;(function(global, undefined) {
 
+// locals
+var _Pool, 
+  _usingPool = false,
+  proto = Vector.prototype, 
+  defineProperty = Object.defineProperty;
+
+// vector class
 function Vector() {}
 
+// vector constructor
 function Vector2D() {
   var args = arguments,
     vec = _Pool.allocate();
@@ -21,51 +29,7 @@ function Vector2D() {
   return vec;
 }
 
-/* Vector Obejt Pool */
-var _Pool = {
-  _objects: [],
-  _len: 0,
-
-  allocate: function() {
-    if (_usingPool && this._len > 0) {
-      this._len--;
-      return this._objects.pop();
-    }
-    return new Vector();
-  },
-
-  free: function(obj) {
-    this._objects.push(obj);
-    this._len++;
-  },
-
-  setSize: function(n) {
-    if (n < 0) return false;
-
-    var l = this._len, 
-      objs = this._objects;
-
-    objs.length = n;
-
-    if (n > l) for(i = l; i < n; i++) objs[i] = Vector2D();
-
-    this._len = n;
-  }
-}, 
-  _usingPool = false;
-
-Vector2D.usePool = function(bool) {
-  _usingPool = bool;
-};
-
-Vector2D.poolSize = function(n) {
-  _Pool.setSize(n);
-};
-
 /* instance methods */
-var proto = Vector.prototype,
-  defineProperty = Object.defineProperty;
-
 defineProperty(proto, 'x', {
   get: function() {
     return this._x;
@@ -160,10 +124,50 @@ Vector2D.div = function(a, n) {
 
 Vector2D.random = function() {
   var rand = Math.random;
-
   return Vector2D(rand(), rand());
 };
 
+/* Vector Object Pool */
+Vector2D.usePool = function(bool) {
+  _usingPool = bool;
+};
+
+Vector2D.poolSize = function(n) {
+  _Pool.setSize(n);
+};
+
+_Pool = {
+  _objects: [],
+  _len: 0,
+
+  allocate: function() {
+    if (_usingPool && this._len > 0) {
+      this._len--;
+      return this._objects.pop();
+    }
+    return new Vector();
+  },
+
+  free: function(obj) {
+    this._objects.push(obj);
+    this._len++;
+  },
+
+  setSize: function(n) {
+    if (n < 0) return false;
+
+    var l = this._len, 
+      objs = this._objects;
+
+    objs.length = n;
+
+    if (n > l) for(i = l; i < n; i++) objs[i] = Vector2D();
+
+    this._len = n;
+  }
+};
+
+// export
 if (typeof module !== 'undefined') {
   module.exports = Vector2D;
 } else {
