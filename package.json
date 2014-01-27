@@ -1,0 +1,20 @@
+{
+  "name": "vector2d",
+  "version": "1.0.0",
+  "description": "physics vector2d lib",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/luizbills/vector2d.git"
+  },
+  "keywords": ["physics", "vector", "2d"],
+  "author": "Luiz 'Bills'",
+  "license": "Public Domain",
+  "bugs": {
+    "url": "https://github.com/luizbills/vector2d/issues"
+  },
+  "homepage": "https://github.com/luizbills/vector2d"
+}

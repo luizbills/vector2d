@@ -1,16 +1,17 @@
 ;(function(global, undefined) {
 
 // locals
-var _Pool, 
+var _Pool,
   _usingPool = false,
-  proto = Vector.prototype, 
-  defineProperty = Object.defineProperty;
+  proto = Vector.prototype,
+  defineProperty = Object.defineProperty,
+  vec2d;
 
 // vector class
 function Vector() {}
 
 // vector constructor
-function Vector2D() {
+vec2d = function Vector2D() {
   var args = arguments,
     vec = _Pool.allocate();
 
@@ -23,8 +24,6 @@ function Vector2D() {
   } else {
     vec._x = vec._y = 0;
   }
-
-  vec._changed = true;
 
   return vec;
 }
@@ -67,6 +66,8 @@ defineProperty(proto, 'magnitude', {
   }
 });
 
+proto._changed = true;
+
 proto.add = function(v) {
   this._x += v._x;
   this._y += v._y;
@@ -98,7 +99,7 @@ proto.normalize = function() {
 };
 
 proto.clone = function() {
-  return Vector2D(this);
+  return vec2d(this);
 };
 
 proto.copy = function(v) {
@@ -116,33 +117,33 @@ proto.destroy = function() {
 };
 
 /* static methods */
-Vector2D.add = function(a, b) {
-  return Vector2D(a._x + b._x, a._y + b._y);
+vec2d.add = function(a, b) {
+  return vec2d(a._x + b._x, a._y + b._y);
 };
 
-Vector2D.sub = function(a, b) {
-  return Vector2D(a._x - b._x, a._y - b._y);
+vec2d.sub = function(a, b) {
+  return vec2d(a._x - b._x, a._y - b._y);
 };
 
-Vector2D.mult = function(a, n) {
-  return Vector2D(a._x * n, a._y * n);
+vec2d.mult = function(a, n) {
+  return vec2d(a._x * n, a._y * n);
 };
 
-Vector2D.div = function(a, n) {
-  return Vector2D(a._x / n, a._y / n);
+vec2d.div = function(a, n) {
+  return vec2d(a._x / n, a._y / n);
 };
 
-Vector2D.random = function() {
+vec2d.random = function() {
   var rand = Math.random;
-  return Vector2D(rand(), rand());
+  return vec2d(rand(), rand());
 };
 
 /* Vector Object Pool */
-Vector2D.usePool = function(bool) {
+vec2d.usePool = function(bool) {
   _usingPool = bool;
 };
 
-Vector2D.poolSize = function(n) {
+vec2d.poolSize = function(n) {
   _Pool.setSize(n);
 };
 
@@ -166,12 +167,12 @@ _Pool = {
   setSize: function(n) {
     if (n < 0) return false;
 
-    var l = this._len, 
+    var l = this._len,
       objs = this._objects;
 
     objs.length = n;
 
-    if (n > l) for(i = l; i < n; i++) objs[i] = Vector2D();
+    if (n > l) for(i = l; i < n; i++) objs[i] = vec2d();
 
     this._len = n;
   }
@@ -179,9 +180,9 @@ _Pool = {
 
 // export
 if (typeof module !== 'undefined') {
-  module.exports = Vector2D;
+  module.exports = vec2d;
 } else {
-  global.Vector2D = Vector2D;
+  global.Vector2D = vec2d;
 }
 
-})(window || global);
+})(typeof window === 'object' ? window : global);
