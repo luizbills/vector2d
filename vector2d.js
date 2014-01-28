@@ -1,4 +1,4 @@
-;(function(global, undefined) {
+;(function(window, undefined) {
 
 // locals
 var _Pool,
@@ -95,7 +95,9 @@ proto.div = function(n) {
 proto.normalize = function() {
   var mag = this.magnitude;
 
-  if (mag !== 0) this.div(mag);
+  if (mag !== 0) {
+    this.div(mag);
+  }
 };
 
 proto.clone = function() {
@@ -113,7 +115,9 @@ proto.toString = function(v) {
 };
 
 proto.destroy = function() {
-  if (_usingPool) _Pool.free(this);
+  if (_usingPool) {
+    _Pool.free(this);
+  }
 };
 
 /* static methods */
@@ -167,12 +171,16 @@ _Pool = {
   setSize: function(n) {
     if (n < 0) return false;
 
-    var l = this._len,
+    var len = this._len,
       objs = this._objects;
 
     objs.length = n;
 
-    if (n > l) for(i = l; i < n; i++) objs[i] = vec2d();
+    if (n > len) {
+      for(i = len; i < n; i++) {
+        objs[i] = vec2d();
+      }
+    }
 
     this._len = n;
   }
@@ -182,7 +190,7 @@ _Pool = {
 if (typeof module !== 'undefined') {
   module.exports = vec2d;
 } else {
-  global.Vector2D = vec2d;
+  window.Vector2D = vec2d;
 }
 
-})(typeof window === 'object' ? window : global);
+})(typeof module === 'undefined' ? window : null);
