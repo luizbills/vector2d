@@ -1,5 +1,5 @@
 {
-  "name": "vector2d",
+  "name": "physics-vector2d",
   "version": "1.0.0",
   "description": "physics vector2d lib",
   "main": "index.js",
