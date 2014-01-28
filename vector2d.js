@@ -5,13 +5,13 @@ var _Pool,
   _usingPool = false,
   proto = Vector.prototype,
   defineProperty = Object.defineProperty,
-  vec2d;
+  vec2d = Vector2D;
 
 // vector class
 function Vector() {}
 
 // vector constructor
-vec2d = function Vector2D() {
+function Vector2D() {
   var args = arguments,
     vec = _Pool.allocate();
 
